@@ -39,7 +39,7 @@ export default class MaterialDialog extends Component {
         visible={this.props.visible}
         onRequestClose={this.props.onCancel}>
         <TouchableWithoutFeedback onPress={this.props.onCancel}>
-          <View style={styles.backgroundOverlay}>
+          <View style={[styles.backgroundOverlay, { backgroundColor: this.props.overlayColor }]}>
             <View style={styles.modalContainer}>
               <TouchableWithoutFeedback>
                 <View>
@@ -60,21 +60,25 @@ export default class MaterialDialog extends Component {
                     : styles.contentContainer}>
                     {this.props.children}
                   </View>
-                  {this.props.onOk != null && this.props.onCancel != null
-                    ? <View
-                        style={this.props.scrolled
-                        ? styles.actionsContainerScrolled
-                        : styles.actionsContainer}>
-                        <ActionButton
-                          colorAccent={this.props.colorAccent}
-                          onPress={this.props.onCancel}
-                          label={this.props.cancelLabel} />
-                        <ActionButton
-                          colorAccent={this.props.colorAccent}
-                          onPress={this.props.onOk}
-                          label={this.props.okLabel} />
-                      </View>
-                    : null}
+                  <View
+                    style={this.props.scrolled
+                    ? styles.actionsContainerScrolled
+                    : styles.actionsContainer}>
+                    
+                    {this.props.onCancel != null && 
+                      <ActionButton
+                        colorAccent={this.props.colorAccent}
+                        onPress={this.props.onCancel}
+                        label={this.props.cancelLabel} />
+                    }
+
+                    {this.props.onOk != null &&
+                      <ActionButton
+                        colorAccent={this.props.colorAccent}
+                        onPress={this.props.onOk}
+                        label={this.props.okLabel} />
+                    }
+                  </View>
                 </View>
               </TouchableWithoutFeedback>
             </View>
@@ -95,23 +99,36 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     marginHorizontal: 16,
-    marginVertical: 106,
+    marginVertical: 86,
     paddingTop: 24,
-    minWidth: 280,
+    minWidth: 288,
     borderRadius: 2,
     backgroundColor: colors.background,
-    elevation: 24,
+    ...Platform.select({
+      android: {
+        elevation: 24,
+      },
+      ios:  {
+        shadowColor: "#000000",
+        shadowOpacity: 0.16,
+        shadowRadius: 5,
+        shadowOffset: {
+          height: 2,
+          width: 2,
+        },
+      }
+    })    
   },
   titleContainer: {
     paddingHorizontal: 24,
-    paddingBottom: 20,
+    paddingBottom: 6,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
   titleContainerScrolled: {
     paddingHorizontal: 24,
-    paddingBottom: 20,
+    paddingBottom: 6,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -159,6 +176,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 8,
     minWidth: 64,
+    minHeight: 44,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -187,6 +205,7 @@ MaterialDialog.propTypes = {
   titleColor: PropTypes.string,
   colorAccent: PropTypes.string,
   scrolled: PropTypes.bool,
+  overlayColor: PropTypes.string,
 }
 
 MaterialDialog.defaultProps = {
@@ -195,6 +214,7 @@ MaterialDialog.defaultProps = {
   titleColor: colors.androidPrimaryTextColor,
   colorAccent: colors.androidColorAccent,
   scrolled: false,
+  overlayColor: colors.backgroundOverlay,
 };
 
 ActionButton.propTypes = {
