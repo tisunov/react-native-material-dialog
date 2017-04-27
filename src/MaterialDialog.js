@@ -21,7 +21,7 @@ class ActionButton extends Component {
         underlayColor={colors.androidPressedUnderlay}
         onPress={this.props.onPress}>
         <Text
-          style={[styles.actionText, { color: this.props.colorAccent }]}>
+          style={[styles.actionText, { color: this.props.colorAccent } ]}>
           {this.props.label}
         </Text>
       </TouchableHighlight>
@@ -40,7 +40,7 @@ export default class MaterialDialog extends Component {
         onRequestClose={this.props.onCancel}>
         <TouchableWithoutFeedback onPress={this.props.onCancel}>
           <View style={[styles.backgroundOverlay, { backgroundColor: this.props.overlayColor }]}>
-            <View style={styles.modalContainer}>
+            <View style={[styles.modalContainer, {marginBottom: this.props.bottomMargin }]}>
               <TouchableWithoutFeedback>
                 <View>
                   {this.props.title != null
@@ -67,7 +67,7 @@ export default class MaterialDialog extends Component {
                     
                     {this.props.onCancel != null && 
                       <ActionButton
-                        colorAccent={this.props.colorAccent}
+                        colorAccent={colors.secondaryButtonTextColor}
                         onPress={this.props.onCancel}
                         label={this.props.cancelLabel} />
                     }
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     marginHorizontal: 16,
-    marginVertical: 86,
+    marginBottom: 115,
     paddingTop: 24,
     minWidth: 288,
     borderRadius: 2,
@@ -175,11 +175,14 @@ const styles = StyleSheet.create({
     marginRight: 8,
     paddingHorizontal: 8,
     paddingVertical: 8,
-    minWidth: 64,
+    minWidth: 84,
     minHeight: 44,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  cancel: {
+
   },
   actionText: {
     fontSize: 14,
@@ -197,7 +200,7 @@ const styles = StyleSheet.create({
 MaterialDialog.propTypes = {
   visible: PropTypes.bool.isRequired,
   children: PropTypes.element.isRequired,
-  onCancel: PropTypes.func.isRequired,
+  onCancel: PropTypes.func,
   onOk: PropTypes.func,
   cancelLabel: PropTypes.string,
   okLabel: PropTypes.string,
@@ -206,6 +209,7 @@ MaterialDialog.propTypes = {
   colorAccent: PropTypes.string,
   scrolled: PropTypes.bool,
   overlayColor: PropTypes.string,
+  bottomMargin: PropTypes.number,
 }
 
 MaterialDialog.defaultProps = {
@@ -215,6 +219,7 @@ MaterialDialog.defaultProps = {
   colorAccent: colors.androidColorAccent,
   scrolled: false,
   overlayColor: colors.backgroundOverlay,
+  bottomMargin: 115,
 };
 
 ActionButton.propTypes = {
